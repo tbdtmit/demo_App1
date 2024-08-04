@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{ADAB1CC6-DB3E-49E8-A41E-AA869D9D2DC7}</ProjectGuid>
+    <RootNamespace>mini</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\BuildPath\Libraries\Qt-5.12.8\include;D:\BuildPath\Libraries\Qt-5.12.8\include\QtAccessibilitySupport;D:\BuildPath\Libraries\Qt-5.12.8\include\QtAV;D:\BuildPath\Libraries\Qt-5.12.8\include\QtAVWidgets;D:\BuildPath\Libraries\Qt-5.12.8\include\QtConcurrent;D:\BuildPath\Libraries\Qt-5.12.8\include\QtCore;D:\BuildPath\Libraries\Qt-5.12.8\include\QtDBus;D:\BuildPath\Libraries\Qt-5.12.8\include\QtDeviceDiscoverySupport;D:\BuildPath\Libraries\Qt-5.12.8\include\QtEdidSupport;D:\BuildPath\Libraries\Qt-5.12.8\include\QtEventDispatcherSupport;D:\BuildPath\Libraries\Qt-5.12.8\include\QtZlib;D:\BuildPath\Libraries\Qt-5.12.8\include\QtXml;D:\BuildPath\Libraries\Qt-5.12.8\include\QtWindowsUIAutomationSupport;D:\BuildPath\Libraries\Qt-5.12.8\include\QtWidgets;D:\BuildPath\Libraries\Qt-5.12.8\include\QtWebSockets;D:\BuildPath\Libraries\Qt-5.12.8\include\QtThemeSupport;D:\BuildPath\Libraries\Qt-5.12.8\include\QtTest;D:\BuildPath\Libraries\Qt-5.12.8\include\QtSql;D:\BuildPath\Libraries\Qt-5.12.8\include\QtPrintSupport;D:\BuildPath\Libraries\Qt-5.12.8\include\QtPlatformHeaders;D:\BuildPath\Libraries\Qt-5.12.8\include\QtNetwork;D:\BuildPath\Libraries\Qt-5.12.8\include\QtGui;D:\BuildPath\Libraries\Qt-5.12.8\include\QtFontDatabaseSupport;D:\BuildPath\Libraries\Qt-5.12.8\include\QtFbSupport;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Qt5AccessibilitySupportd.lib;Qt5Concurrentd.lib;Qt5Cored.lib;Qt5DBusd.lib;Qt5DeviceDiscoverySupportd.lib;Qt5EdidSupportd.lib;Qt5EventDispatcherSupportd.lib;Qt5FbSupportd.lib;Qt5FontDatabaseSupportd.lib;Qt5Guid.lib;Qt5Networkd.lib;Qt5PrintSupportd.lib;Qt5Sqld.lib;Qt5Testd.lib;Qt5ThemeSupportd.lib;Qt5WebSocketsd.lib;Qt5Widgetsd.lib;Qt5WindowsUIAutomationSupportd.lib;Qt5Xmld.lib;QtAVd.lib;QtAVWidgetsd.lib;qtfreetyped.lib;qtharfbuzzd.lib;qtlibpngd.lib;qtmaind.lib;qtpcre2d.lib;version.lib;winmm.lib;userenv.lib;netapi32.lib;ws2_32.lib;qdirect2d.lib;qminimald.lib;qoffscreend.lib;qwindowsd.lib;qgenericbearerd.lib;qtuiotouchplugind.lib;qxdgdesktopportald.lib;windowsprintersupportd.lib;qsqlited.lib;qsqlodbcd.lib;qwindowsvistastyled.lib;qwindows.lib;Dwmapi.lib;Wtsapi32.lib;Imm32.lib;qgifd.lib;qicnsd.lib;qicod.lib;qjpegd.lib;qtgad.lib;qtiffd.lib;qwbmpd.lib;qwebpd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>D:\BuildPath\Libraries\Qt-5.12.8\plugins\styles;D:\BuildPath\Libraries\Qt-5.12.8\plugins\sqldrivers;D:\BuildPath\Libraries\Qt-5.12.8\plugins\printsupport;D:\BuildPath\Libraries\Qt-5.12.8\plugins\imageformats;D:\BuildPath\Libraries\Qt-5.12.8\plugins\generic;D:\BuildPath\Libraries\Qt-5.12.8\plugins\bearer;D:\BuildPath\Libraries\Qt-5.12.8\plugins\platformthemes;D:\BuildPath\Libraries\Qt-5.12.8\plugins\platforms;D:\BuildPath\Libraries\Qt-5.12.8\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="qt_static_plugins.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="Map.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
