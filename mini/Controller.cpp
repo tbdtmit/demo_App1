@@ -53,7 +53,7 @@ vector<Point> Controller::BFS()
 void Controller::setupController()
 {
     QGridLayout* layout = new QGridLayout(this);
-    typeButton buttons[8] = {
+    typeButton buttons[9] = {
         typeButton::UnBlocked,
         typeButton::Blocked,
         typeButton::Target,
@@ -61,9 +61,10 @@ void Controller::setupController()
         typeButton::Starting,
         typeButton::ClearPath,
         typeButton::Resize,
-        typeButton::Reset };
+        typeButton::Reset,
+        typeButton::ClearGrid };
 
-    for (int row = 0; row < 8; ++row) {
+    for (int row = 0; row < 9; ++row) {
         QPushButton* button = new ControllerBut(buttons[row], this);
         button->setCheckable(true);
         _buttonGroup->addButton(button);
@@ -113,6 +114,10 @@ ControllerBut::ControllerBut(typeButton type, Controller* parent)
         break;
     case typeButton::Resize:
         this->setText("Resize");
+        this->setStyleSheet("background-color: white"); // Đặt màu nền cho nút
+        break;
+    case typeButton::ClearGrid:
+        this->setText("Clear Grid");
         this->setStyleSheet("background-color: white"); // Đặt màu nền cho nút
         break;
     default:
@@ -165,10 +170,11 @@ void ControllerBut::handleClick()
     }
     else if (_controller->_status == typeButton::Reset)
     {
-        //widget.reset();
+
         controller->_source = nullptr;
         controller->_target = nullptr;
         controller->_path.clear();
+        //widget.reset();
         widget = std::make_shared<GridWidget>();
         widget->show();
         return;
@@ -181,6 +187,10 @@ void ControllerBut::handleClick()
         }
         controller->_resize.resize(200, 150);
         controller->_resize.show();
+    }
+    else if (_controller->_status == typeButton::ClearGrid)
+    {
+        _controller->_isClearGrid = !_controller->_isClearGrid;
     }
     widget->update();
 }
@@ -231,12 +241,13 @@ void ResizeWidget::onResizeButtonClicked() {
     int height = heightEdit->text().toInt();
 
     // Resize the widget
-    //widget.reset();
+
     if (width >= 32 && width <= 256 && height >= 32 && height <= 256)
     {
         controller->_source = nullptr;
         controller->_target = nullptr;
         controller->_path.clear();
+        //widget.reset();
         widget = std::make_shared<GridWidget>(width, height);
         widget->show();
     }

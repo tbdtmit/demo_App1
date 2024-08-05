@@ -29,7 +29,8 @@ enum typeButton
     Starting,
     ClearPath,
     Resize,
-    Reset
+    Reset,
+    ClearGrid
 };
 
 
@@ -96,5 +97,6 @@ public:
     vector<Point> _path;
     int _clearMode = 0;
     ResizeWidget _resize;
+    bool _isClearGrid = false;
 };
 

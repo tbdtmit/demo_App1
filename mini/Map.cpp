@@ -67,12 +67,12 @@ void GridWidget::paintEvent(QPaintEvent* event)
 
 
                 painter.fillRect(*_gridRects[i][j], painter.pen().color());
-                //if (_cellSize != 4)
-                //{
+                if (!controller->_isClearGrid)
+                {
                 QPen blackPen(Qt::black);
                 painter.setPen(blackPen);
                 painter.drawRect(*_gridRects[i][j]);
-                //}
+                }
 
         }
     }
