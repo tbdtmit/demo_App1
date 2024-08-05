@@ -32,7 +32,7 @@ void GridWidget::mousePressEvent(QMouseEvent* event)
 
         if (event->pos().x() < _gridSizeRow && event->pos().y() < _gridSizeCol && event->pos().y() > _cellSize && event->pos().x() > _cellSize) {
             _clickedCell = QPoint(x, y);
-            std::cout << "Cell clicked at position (" << x << ", " << y << ")" << std::endl;
+            std::cout << "Cell clicked at position (" << y << ", " << x << ")" << std::endl;
             gridUpdate(event);
         }
     
@@ -67,12 +67,12 @@ void GridWidget::paintEvent(QPaintEvent* event)
 
 
                 painter.fillRect(*_gridRects[i][j], painter.pen().color());
-                if (_cellSize != 4)
-                {
+                //if (_cellSize != 4)
+                //{
                 QPen blackPen(Qt::black);
                 painter.setPen(blackPen);
                 painter.drawRect(*_gridRects[i][j]);
-                }
+                //}
 
         }
     }
@@ -104,7 +104,7 @@ void GridWidget::gridUpdate(QMouseEvent* e)
             break;
         }
 
-        std::cout << "Cell: " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_type << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_x << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_y << " map value: " << std::endl;
+        std::cout << "Cell: " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_type << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_y << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_x << " map value: " << std::endl;
     }
     update();
 }
