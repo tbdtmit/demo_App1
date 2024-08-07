@@ -45,6 +45,8 @@ public:
     GridWidget(int maxX = 32, int maxY = 32, QWidget* parent = nullptr);
 
     void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
     void gridUpdate(QMouseEvent* event);
 //private:
@@ -58,6 +60,9 @@ public:
     int _gridSizeCol;
     QVector<QVector<std::shared_ptr<Cell>>> _gridRects;
     QPoint _clickedCell;
+    bool _isDragging = false;
+    QPoint _lastMousePosition;
+
 
 };
 

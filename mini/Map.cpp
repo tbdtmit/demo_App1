@@ -18,30 +18,56 @@ GridWidget::GridWidget(int maxX, int maxY, QWidget* parent)
         _cellSize = 4;
     }
 
-    _gridSizeRow = _cellSize * (_maxX + 1);
-    _gridSizeCol = _cellSize * (_maxY + 1);
-    setFixedSize(_gridSizeRow, _gridSizeCol);
+    _gridSizeRow = _cellSize * (_maxX);
+    _gridSizeCol = _cellSize * (_maxY);
+    setFixedSize(_gridSizeCol, _gridSizeRow);
     setupGrid();
 }
 
 void GridWidget::mousePressEvent(QMouseEvent* event)
 {
     
-        int x = event->pos().x() / _cellSize;
-        int y = event->pos().y() / _cellSize;
+    if (event->button() == Qt::LeftButton) {
+        _isDragging = true;
+        //_lastMousePosition = event->pos();
+    }
+    int x = event->pos().x() / _cellSize + 1;
+    int y = event->pos().y() / _cellSize + 1;
 
-        if (event->pos().x() < _gridSizeRow && event->pos().y() < _gridSizeCol && event->pos().y() > _cellSize && event->pos().x() > _cellSize) {
-            _clickedCell = QPoint(x, y);
-            std::cout << "Cell clicked at position (" << y << ", " << x << ")" << std::endl;
+    if (event->pos().x() < _gridSizeCol && event->pos().y() < _gridSizeRow && event->pos().y() > 0 && event->pos().x() > 0) {
+        _clickedCell = QPoint(y, x);
+        std::cout << "Cell clicked at position (" << y << ", " << x << ")" << std::endl;
+        gridUpdate(event);
+    }
+    
+}
+
+void GridWidget::mouseMoveEvent(QMouseEvent* event)
+{
+    if (_isDragging)
+    {
+        int x = event->pos().x() / _cellSize + 1;
+        int y = event->pos().y() / _cellSize + 1;
+
+        if (event->pos().x() < _gridSizeCol && event->pos().y() < _gridSizeRow && event->pos().y() > 0 && event->pos().x() > 0) {
+            _clickedCell = QPoint(y, x);
+            std::cout << "Cell dragged at position (" << y << ", " << x << ")" << std::endl;
             gridUpdate(event);
         }
-    
+    }
+}
+
+void GridWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        _isDragging = false;
+    }
 }
 
 void GridWidget::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
-
+    cout << "paintEvent " << endl;
     for (int i = 1; i <= _maxX; ++i) {
         for (int j = 1; j <= _maxY; ++j) {
             switch (_gridRects[i][j]->_type)
@@ -106,8 +132,24 @@ void GridWidget::gridUpdate(QMouseEvent* e)
 
         std::cout << "Cell: " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_type << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_y << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_x << " map value: " << std::endl;
     }
+    else if (_isDragging)
+    {
+        switch (controller->_status)
+        {
+        case typeButton::Blocked:
+            _gridRects[_clickedCell.x()][_clickedCell.y()]->setBlocked();
+            break;
+        case typeButton::UnBlocked:
+            _gridRects[_clickedCell.x()][_clickedCell.y()]->setUnBlocked();
+            break;
+        default:
+            break;
+        }
+        std::cout << "Cell: " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_type << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_x << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_y << " map value: " << std::endl;
+    }
     update();
 }
+
 
 void GridWidget::setupGrid()
 {
@@ -119,8 +161,8 @@ void GridWidget::setupGrid()
 
             auto cell = std::make_shared<Cell>();
             cell->setLocation(row, col);
-            cell->setX(_cellSize * row);
-            cell->setY(_cellSize * col);
+            cell->setX(_cellSize * (col - 1));
+            cell->setY(_cellSize * (row - 1));
             cell->setSize(QSize(_cellSize, _cellSize));
             _gridRects[row][col] = cell;
         }
