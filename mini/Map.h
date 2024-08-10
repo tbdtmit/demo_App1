@@ -49,6 +49,7 @@ public:
     void mouseReleaseEvent(QMouseEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
     void gridUpdate(QMouseEvent* event);
+    void drawInitialGrid(QPainter& painter);
 //private:
     void setupGrid();
     int _maxX;
@@ -62,6 +63,8 @@ public:
     QPoint _clickedCell;
     bool _isDragging = false;
     QPoint _lastMousePosition;
+    bool _isFirst = true;
+    QPixmap _pixmap;
 
 
 };

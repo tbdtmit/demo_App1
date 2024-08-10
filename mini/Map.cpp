@@ -66,11 +66,55 @@ void GridWidget::mouseReleaseEvent(QMouseEvent* event)
 
 void GridWidget::paintEvent(QPaintEvent* event)
 {
-    QPainter painter(this);
-    cout << "paintEvent " << endl;
-    for (int i = 1; i <= _maxX; ++i) {
-        for (int j = 1; j <= _maxY; ++j) {
-            switch (_gridRects[i][j]->_type)
+    QPainter painter1(this);
+
+    painter1.drawPixmap(0, 0, _pixmap); // Vẽ lại pixmap hiện tại
+    QPainter painter(&_pixmap);
+    //if (_isFirst)
+    //{
+    //    int cnt = 0;
+    //    for (int i = 1; i <= _maxX; ++i) {
+    //        for (int j = 1; j <= _maxY; ++j) {
+    //            cout << "paintEvent " << ++cnt << endl;
+    //            switch (_gridRects[i][j]->_type)
+    //            {
+    //            case Cell::typeCell::Blocked:
+    //                painter.setPen(Qt::gray);
+    //                break;
+    //            case Cell::typeCell::UnBlocked:
+    //                painter.setPen(Qt::white);
+    //                break;
+    //            case Cell::typeCell::Target:
+    //                painter.setPen(Qt::red);
+    //                break;
+    //            case Cell::typeCell::Source:
+    //                painter.setPen(Qt::green);
+    //                break;
+    //            case Cell::typeCell::Path:
+    //                painter.setPen(Qt::cyan);
+    //                break;
+    //            default:
+    //                break;
+    //            }
+
+
+    //            painter.fillRect(*_gridRects[i][j], painter.pen().color());
+    //            if (!controller->_isClearGrid)
+    //            {
+    //                QPen blackPen(Qt::black);
+    //                painter.setPen(blackPen);
+    //                painter.drawRect(*_gridRects[i][j]);
+    //            }
+
+    //        }
+    //    }
+    //    _isFirst = false;
+    //}
+    //else
+    //{
+        if (_clickedCell.x() >= 1 && _clickedCell.x() <= _maxX && _clickedCell.y() >= 1 && _clickedCell.y() <= _maxY)
+        {
+            switch (_gridRects[_clickedCell.x()][_clickedCell.y()]->_type)
             {
             case Cell::typeCell::Blocked:
                 painter.setPen(Qt::gray);
@@ -91,17 +135,14 @@ void GridWidget::paintEvent(QPaintEvent* event)
                 break;
             }
 
-
-                painter.fillRect(*_gridRects[i][j], painter.pen().color());
-                if (!controller->_isClearGrid)
-                {
-                QPen blackPen(Qt::black);
-                painter.setPen(blackPen);
-                painter.drawRect(*_gridRects[i][j]);
-                }
-
+            painter.fillRect(*_gridRects[_clickedCell.x()][_clickedCell.y()], painter.pen().color());
+            QPen blackPen(Qt::black);
+            painter.setPen(blackPen);
+            painter.drawRect(*_gridRects[_clickedCell.x()][_clickedCell.y()]);
         }
-    }
+    //}
+
+    cout << "paintEvent " << endl;
 }
 
 void GridWidget::gridUpdate(QMouseEvent* e)
@@ -147,7 +188,47 @@ void GridWidget::gridUpdate(QMouseEvent* e)
         }
         std::cout << "Cell: " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_type << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_x << " " << _gridRects[_clickedCell.x()][_clickedCell.y()]->_y << " map value: " << std::endl;
     }
+    //update(*(_gridRects[_clickedCell.x()][_clickedCell.y()].get()));
     update();
+}
+
+void GridWidget::drawInitialGrid(QPainter& painter)
+{
+    int cnt = 0;
+    for (int i = 1; i <= _maxX; ++i) {
+        for (int j = 1; j <= _maxY; ++j) {
+            cout << "paintEvent Initial " << ++cnt << endl;
+            switch (_gridRects[i][j]->_type)
+            {
+            case Cell::typeCell::Blocked:
+                painter.setPen(Qt::gray);
+                break;
+            case Cell::typeCell::UnBlocked:
+                painter.setPen(Qt::white);
+                break;
+            case Cell::typeCell::Target:
+                painter.setPen(Qt::red);
+                break;
+            case Cell::typeCell::Source:
+                painter.setPen(Qt::green);
+                break;
+            case Cell::typeCell::Path:
+                painter.setPen(Qt::cyan);
+                break;
+            default:
+                break;
+            }
+
+
+            painter.fillRect(*_gridRects[i][j], painter.pen().color());
+            if (!controller->_isClearGrid)
+            {
+                QPen blackPen(Qt::black);
+                painter.setPen(blackPen);
+                painter.drawRect(*_gridRects[i][j]);
+            }
+        }
+    }
 }
 
 
@@ -167,6 +248,13 @@ void GridWidget::setupGrid()
             _gridRects[row][col] = cell;
         }
     }
+    // Khởi tạo pixmap với kích thước của widget
+    _pixmap = QPixmap(size());
+    _pixmap.fill(Qt::transparent); // Đảm bảo rằng pixmap ban đầu là trong suốt
+
+    // Vẽ toàn bộ các hình vuông ban đầu lên pixmap
+    QPainter painter(&_pixmap);
+    drawInitialGrid(painter);
 
 }
 
