@@ -20,9 +20,8 @@ int main(int argc, char* argv[])
     controller = std::make_shared<Controller>();
     widget = std::make_shared<GridWidget>();
 
-    //QWidget w;
-    //QMessageBox::information(&w, "Message","Day la ban demo nhanh chua duoc toi uu hieu nang va con nhieu thieu xot. Neu anh/chi co yeu cau nao khac, em rat mong nhan duoc gop y de san pham duoc hoan thien. Xin cam on.");
     widget->show();
+    controller->move(widget->x() - controller->width() - 20, widget->y());  
     controller->show();
 
     return app.exec();

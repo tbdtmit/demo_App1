@@ -7,6 +7,8 @@
 #include "Controller.h"
 #include <qevent.h>
 #include <qpainter.h>
+#include <qapplication.h>
+#include <qscreen.h>
 
 class GridWidget;
 class Controller;
@@ -23,7 +25,8 @@ public:
         Blocked,
         Target,
         Source,
-        Path
+        Path,
+        StepOnBFS
     };
 
     void setLocation(int x, int y);
@@ -31,8 +34,9 @@ public:
     void setTarget();
     void setBlocked();
     void setUnBlocked();
+    void setStepOnBFS();
 
-    typeCell _type = typeCell::UnBlocked;
+    Cell::typeCell _type = typeCell::UnBlocked;
     int _x;
     int _y;
     Point _parentOnBFS;
@@ -48,24 +52,32 @@ public:
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
-    void gridUpdate(QMouseEvent* event);
-    void drawInitialGrid(QPainter& painter);
+    void resizeEvent(QResizeEvent* event) override;
+    void enterEvent(QEvent* event) override;
+    void mapUpdate(QMouseEvent* event);
+    void drawInitialMap(QPainter& paintermap, QPainter& paintergrid, int i, int j);
+    void drawMapAfterResize(QPainter& paintermap, QPainter& paintergrid, int i, int j);
 //private:
-    void setupGrid();
-    int _maxX;
-    int _maxY;
+    void setupInitialMap();
     void drawPath();
+    void clearPath();
 
-    int _cellSize = 15;
-    int _gridSizeRow;
-    int _gridSizeCol;
+
+    int _maxRow;
+    int _maxCol;
+
+    float _cellSizeX = 15;
+    float _cellSizeY = 15;
+    float _gridSizeRow;
+    float _gridSizeCol;
     QVector<QVector<std::shared_ptr<Cell>>> _gridRects;
     QPoint _clickedCell;
     bool _isDragging = false;
-    QPoint _lastMousePosition;
-    bool _isFirst = true;
-    QPixmap _pixmap;
+    QPixmap _map;
+    QPixmap _grid;
+
+
+
 
 
 };
-

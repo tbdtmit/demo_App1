@@ -10,6 +10,9 @@
 #include <qlabel.h>
 #include <qintvalidator>
 #include <qmessagebox.h>
+#include <qcoreapplication.h>
+#include <qtimer.h>
+#include <qthread.h>
 
 using namespace std;
 
@@ -30,7 +33,9 @@ enum typeButton
     ClearPath,
     Resize,
     Reset,
-    ClearGrid
+    ClearGrid,
+    StopFinding,
+    SetTimeOnFrame
 };
 
 
@@ -39,15 +44,12 @@ struct Point {
 };
 
 
-
-
 class ControllerBut : public QPushButton
 {
 public:
 
     ControllerBut(typeButton type, Controller* parent);
     void handleClick();
-
 
     typeButton _type;
     Controller* _controller;
@@ -67,10 +69,21 @@ private:
     QPushButton* resizeButton;
 };
 
+class SetTimeWidget : public QWidget {
+public:
+    SetTimeWidget(QWidget* parent = nullptr);
+
+private slots:
+    void onSetTimeButtonClicked();
+
+private:
+    QLineEdit* setTimeEdit;
+    QPushButton* setTimeButton;
+};
 
 class Controller : public QWidget
 {
-
+    
 public:
 	enum Status
 	{
@@ -82,11 +95,7 @@ public:
         ClearPath
 	};
 
-    Controller(QWidget* parent = nullptr) : QWidget(parent)
-    {
-        setupController();
-    }
-
+    Controller(QWidget* parent = nullptr);
     vector<Point> BFS();
 //private:
     void setupController();
@@ -95,8 +104,12 @@ public:
     Cell* _source = nullptr;
     Cell* _target = nullptr;
     vector<Point> _path;
-    int _clearMode = 0;
     ResizeWidget _resize;
+    SetTimeWidget _setTimeOnFrame;
     bool _isClearGrid = false;
-};
+    bool _isOnBFS = false;
+    double _timeOnFrame = 1;
 
+
+
+};
