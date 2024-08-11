@@ -222,7 +222,7 @@ void ControllerBut::handleClick()
         _controller->_source = nullptr;
         _controller->_target = nullptr;
         _controller->_path.clear();
-        widget.reset();
+        //widget.reset();
         widget = std::make_shared<GridWidget>();
         widget->show();
         return;
@@ -308,7 +308,7 @@ void ResizeWidget::onResizeButtonClicked() {
         controller->_source = nullptr;
         controller->_target = nullptr;
         controller->_path.clear();
-        widget.reset();
+        //widget.reset();
         widget = std::make_shared<GridWidget>(width, height);
         widget->show();
     }
