@@ -70,7 +70,7 @@ void GridWidget::paintEvent(QPaintEvent* event)
     QPainter painter(this);
 
     painter.drawPixmap(0, 0, _map); // Vẽ lại pixmap hiện tại
-    if (!controller->_isClearGrid)
+    if (!Game::controller->_isClearGrid)
     {
         painter.drawPixmap(0, 0, _grid);
     }
@@ -110,9 +110,9 @@ void GridWidget::resizeEvent(QResizeEvent* event)
 
     QScreen* screen = QGuiApplication::primaryScreen();
     auto widthScreen = screen->availableGeometry().width();
-    if (widthScreen - widget->width() > controller->width() + 20 && widget->x() - controller->width() > 20)
+    if (widthScreen - Game::widget->width() > Game::controller->width() + 20 && Game::widget->x() - Game::controller->width() > 20)
     {
-        controller->move(widget->x() - controller->width() - 20, widget->y());
+        Game::controller->move(Game::widget->x() - Game::controller->width() - 20, Game::widget->y());
     }
 }
 
@@ -126,7 +126,7 @@ void GridWidget::mapUpdate(QMouseEvent* e)
         }
         else if (e->button() == Qt::LeftButton)
         {
-            switch (controller->_status)
+            switch (Game::controller->_status)
             {
             case typeButton::Blocked:
                 _gridRects[_clickedCell.x()][_clickedCell.y()]->setBlocked();
@@ -148,7 +148,7 @@ void GridWidget::mapUpdate(QMouseEvent* e)
         }
         else if (_isDragging)
         {
-            switch (controller->_status)
+            switch (Game::controller->_status)
             {
             case typeButton::Blocked:
                 _gridRects[_clickedCell.x()][_clickedCell.y()]->setBlocked();
@@ -197,6 +197,9 @@ void GridWidget::drawMapAfterResize(QPainter& paintermap, QPainter& paintergrid,
         break;
     case Cell::typeCell::Path:
         paintermap.setPen(Qt::cyan);
+        break;
+    case Cell::typeCell::StepOnBFS:
+        paintermap.setPen(Qt::yellow);
         break;
     default:
         break;
@@ -247,10 +250,10 @@ void GridWidget::setupInitialMap()
 void GridWidget::drawPath()
 {
 
-    QPainter paintermap(&widget->_map);
-    if (controller->_path.size())
+    QPainter paintermap(&Game::widget->_map);
+    if (Game::controller->_path.size())
     {
-        for (auto cell : controller->_path)
+        for (auto cell : Game::controller->_path)
         {
             if (this->_gridRects[cell.x][cell.y]->_type == Cell::typeCell::UnBlocked || this->_gridRects[cell.x][cell.y]->_type == Cell::typeCell::StepOnBFS)
             {
@@ -266,9 +269,9 @@ void GridWidget::drawPath()
 
 void GridWidget::clearPath()
 {
-    if (controller->_path.size())
+    if (Game::controller->_path.size())
     {
-        for (auto cell : controller->_path)
+        for (auto cell : Game::controller->_path)
         {
             if (this->_gridRects[cell.x][cell.y]->_type == Cell::typeCell::Path)
             {
@@ -276,7 +279,7 @@ void GridWidget::clearPath()
             }
 
         }
-        controller->_path.clear();
+        Game::controller->_path.clear();
     }
 
 }
@@ -285,7 +288,7 @@ void GridWidget::clearPath()
 void GridWidget::enterEvent(QEvent* event)
 {
     QWidget::enterEvent(event);
-    controller->raise();
+    Game::controller->raise();
 
 }
 
@@ -298,16 +301,16 @@ void Cell::setLocation(int x, int y)
 
 void Cell::setSource()
 {
-    QPainter paintermap(&widget->_map);
+    QPainter paintermap(&Game::widget->_map);
     if (this->_type == typeCell::Target) return;
-    if (controller->_source)
+    if (Game::controller->_source)
     {
-        controller->_source->_type = typeCell::UnBlocked;
+        Game::controller->_source->_type = typeCell::UnBlocked;
         paintermap.setPen(Qt::white);
-        paintermap.fillRect(*controller->_source, paintermap.pen().color());
+        paintermap.fillRect(*Game::controller->_source, paintermap.pen().color());
     }
-    controller->_source = this;
-    controller->_source->_type = typeCell::Source;
+    Game::controller->_source = this;
+    Game::controller->_source->_type = typeCell::Source;
     paintermap.setPen(Qt::green);
     paintermap.fillRect(*this, paintermap.pen().color());
 
@@ -315,23 +318,23 @@ void Cell::setSource()
 
 void Cell::setTarget()
 {
-    QPainter paintermap(&widget->_map);
+    QPainter paintermap(&Game::widget->_map);
     if (this->_type == typeCell::Source) return;
-    if (controller->_target)
+    if (Game::controller->_target)
     {
-        controller->_target->_type = typeCell::UnBlocked;
+        Game::controller->_target->_type = typeCell::UnBlocked;
         paintermap.setPen(Qt::white);
-        paintermap.fillRect(*controller->_target, paintermap.pen().color());
+        paintermap.fillRect(*Game::controller->_target, paintermap.pen().color());
     }
-    controller->_target = this;
-    controller->_target->_type = typeCell::Target;
+    Game::controller->_target = this;
+    Game::controller->_target->_type = typeCell::Target;
     paintermap.setPen(Qt::red);
     paintermap.fillRect(*this, paintermap.pen().color());
 }
 
 void Cell::setBlocked()
 {
-    QPainter paintermap(&widget->_map);
+    QPainter paintermap(&Game::widget->_map);
     if (this->_type != typeCell::Source && this->_type != typeCell::Target)
     {
         _type = typeCell::Blocked;
@@ -343,7 +346,7 @@ void Cell::setBlocked()
 
 void Cell::setUnBlocked()
 {
-    QPainter paintermap(&widget->_map);
+    QPainter paintermap(&Game::widget->_map);
     if (this->_type != typeCell::Source && this->_type != typeCell::Target)
     {
         _type = typeCell::UnBlocked;
@@ -355,7 +358,7 @@ void Cell::setUnBlocked()
 
 void Cell::setStepOnBFS()
 {
-    QPainter paintermap(&widget->_map);
+    QPainter paintermap(&Game::widget->_map);
     if (this->_type != typeCell::Source && this->_type != typeCell::Target)
     {
         _type = typeCell::StepOnBFS;

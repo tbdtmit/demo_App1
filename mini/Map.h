@@ -13,7 +13,7 @@
 class GridWidget;
 class Controller;
 
-extern std::shared_ptr<Controller> controller;
+//::std::shared_ptr<Controller> Game::controller;
 
 
 class Cell : public QRect
@@ -80,4 +80,17 @@ public:
 
 
 
+};
+
+class Game : public QWidget{
+
+public:
+    void launch()
+    {
+        Game::widget->show();
+        Game::controller->move(Game::widget->x() - Game::controller->width() - 20, Game::widget->y());
+        Game::controller->show();
+    }
+    static std::shared_ptr<Controller> controller;
+    static std::shared_ptr<GridWidget> widget;
 };

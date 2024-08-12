@@ -11,18 +11,17 @@
 #include "Map.h"
 
 
-std::shared_ptr<Controller> controller;
-std::shared_ptr<GridWidget> widget;
+std::shared_ptr<Controller> Game::controller;
+std::shared_ptr<GridWidget> Game::widget;
 
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    controller = std::make_shared<Controller>();
-    widget = std::make_shared<GridWidget>();
+    Game::controller = std::make_shared<Controller>();
+    Game::widget = std::make_shared<GridWidget>();
+    Game demo;
+    demo.launch();
 
-    widget->show();
-    controller->move(widget->x() - controller->width() - 20, widget->y());  
-    controller->show();
 
     return app.exec();
 }

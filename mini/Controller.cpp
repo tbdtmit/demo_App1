@@ -18,8 +18,8 @@ void clearStepsOnBFS(vector<Point> stepsOnBFS)
     {
         for (auto cell : stepsOnBFS)
         {
-            if(widget->_gridRects[cell.x][cell.y]->_type != Cell::typeCell::Blocked)
-                widget->_gridRects[cell.x][cell.y]->setUnBlocked();
+            if(Game::widget->_gridRects[cell.x][cell.y]->_type != Cell::typeCell::Blocked)
+                Game::widget->_gridRects[cell.x][cell.y]->setUnBlocked();
         }
     }
 
@@ -37,7 +37,7 @@ vector<Point> Controller::BFS()
     Point start = { _source->_x, _source->_y };
     Point end = { _target->_x, _target->_y };
 
-    vector<vector<bool>> visited(widget->_maxRow + 1, vector<bool>(widget->_maxCol + 1, false));
+    vector<vector<bool>> visited(Game::widget->_maxRow + 1, vector<bool>(Game::widget->_maxCol + 1, false));
     queue<Point> q;
 
     q.push(start);
@@ -51,19 +51,19 @@ vector<Point> Controller::BFS()
 
         for (const Point& dir : directions) {
             Point next = { current.x + dir.x, current.y + dir.y };
-            if (isValid(next.x, next.y, widget->_maxRow, widget->_maxCol) 
+            if (isValid(next.x, next.y, Game::widget->_maxRow, Game::widget->_maxCol)
                 && visited[next.x][next.y] == false
-                && widget->_gridRects[next.x][next.y]->_type != Cell::typeCell::Blocked 
-                && widget->_gridRects[current.x][current.y]->_type != Cell::typeCell::Blocked)
+                && Game::widget->_gridRects[next.x][next.y]->_type != Cell::typeCell::Blocked
+                && Game::widget->_gridRects[current.x][current.y]->_type != Cell::typeCell::Blocked)
             {
                 visited[next.x][next.y] = true;
                 q.push(next);
-                widget->_gridRects[next.x][next.y]->_parentOnBFS = current;
+                Game::widget->_gridRects[next.x][next.y]->_parentOnBFS = current;
                 if (_timeOnFrame)
                 {
-                    widget->_gridRects[next.x][next.y]->setStepOnBFS();
+                    Game::widget->_gridRects[next.x][next.y]->setStepOnBFS();
                     _stepsOnBFS.push_back(next);
-                    widget->update();
+                    Game::widget->update();
                     delay(_timeOnFrame);
                 }
                 if (!_isOnBFS)
@@ -76,8 +76,8 @@ vector<Point> Controller::BFS()
                     vector<Point> path;
                     while (!(next.x == start.x && next.y == start.y))
                     {
-                        path.push_back(widget->_gridRects[next.x][next.y]->_parentOnBFS);
-                        next = widget->_gridRects[next.x][next.y]->_parentOnBFS;
+                        path.push_back(Game::widget->_gridRects[next.x][next.y]->_parentOnBFS);
+                        next = Game::widget->_gridRects[next.x][next.y]->_parentOnBFS;
                     }
                     clearStepsOnBFS(_stepsOnBFS);
                     return path;
@@ -198,10 +198,10 @@ void ControllerBut::handleClick()
     {
         if (_controller->_source && _controller->_target && _controller->_source->isValid() && _controller->_target->isValid())
         {
-            widget->clearPath();
+            Game::widget->clearPath();
             _controller->_path = _controller->BFS();
             _controller->_isOnBFS = false;
-            widget->drawPath();
+            Game::widget->drawPath();
 
         }
         else
@@ -213,7 +213,7 @@ void ControllerBut::handleClick()
     }
     else if (_controller->_status == typeButton::ClearPath)
     {
-        widget->clearPath();
+        Game::widget->clearPath();
 
     }
     else if (_controller->_status == typeButton::Reset)
@@ -222,9 +222,9 @@ void ControllerBut::handleClick()
         _controller->_source = nullptr;
         _controller->_target = nullptr;
         _controller->_path.clear();
-        widget.reset();
-        widget = std::make_shared<GridWidget>();
-        widget->show();
+        Game::widget.reset();
+        Game::widget = std::make_shared<GridWidget>();
+        Game::widget->show();
         return;
     }
     else if (_controller->_status == typeButton::Resize)
@@ -253,7 +253,7 @@ void ControllerBut::handleClick()
         _controller->_setTimeOnFrame.resize(200, 100);
         _controller->_setTimeOnFrame.show();
     }
-    widget->update();
+    Game::widget->update();
 }
 
 
@@ -305,12 +305,12 @@ void ResizeWidget::onResizeButtonClicked() {
 
     if (width >= 32 && width <= 256 && height >= 32 && height <= 256)
     {
-        controller->_source = nullptr;
-        controller->_target = nullptr;
-        controller->_path.clear();
-        widget.reset();
-        widget = std::make_shared<GridWidget>(width, height);
-        widget->show();
+        Game::controller->_source = nullptr;
+        Game::controller->_target = nullptr;
+        Game::controller->_path.clear();
+        Game::widget.reset();
+        Game::widget = std::make_shared<GridWidget>(width, height);
+        Game::widget->show();
     }
     this->close();
 }
@@ -355,7 +355,7 @@ void SetTimeWidget::onSetTimeButtonClicked() {
 
     if (time >= 0 && time <= 1000 )
     {
-        controller->_timeOnFrame = time;
+        Game::controller->_timeOnFrame = time;
     }
     this->close();
 }

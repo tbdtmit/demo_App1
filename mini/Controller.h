@@ -21,7 +21,7 @@ class Cell;
 class GridWidget;
 class ResizeWidget;
 
-extern std::shared_ptr<GridWidget> widget;
+//::std::shared_ptr<GridWidget> Game::widget;
 
 enum typeButton
 {
