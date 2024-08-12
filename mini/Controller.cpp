@@ -25,10 +25,16 @@ void clearStepsOnBFS(vector<Point> stepsOnBFS)
 
 }
 
+double calculateHeuristicValue(int row, int col, Point target) {
+    //return abs(row - target.x) > abs(col - target.y) ? abs(row - target.x) : abs(col - target.y);
+    return sqrt(pow(row - target.x, 2) + pow(col - target.y, 2));
+}
+
 Controller::Controller(QWidget* parent) : QWidget(parent)
 {
-    this->resize(200, height());
+    this->setFixedWidth(100);
     setupController();
+
 }
 
 vector<Point> Controller::BFS()
@@ -38,50 +44,69 @@ vector<Point> Controller::BFS()
     Point end = { _target->_x, _target->_y };
 
     vector<vector<bool>> visited(Game::widget->_maxRow + 1, vector<bool>(Game::widget->_maxCol + 1, false));
-    queue<Point> q;
+    vector<vector<DetailPoint>> details(Game::widget->_maxRow + 1, vector<DetailPoint>(Game::widget->_maxCol + 1));
+    //queue<Point> q;
+    priority_queue<pair<double, Point>, vector<pair<double, Point>>, CompareFirst> q;
 
-    q.push(start);
+    q.push({ 0.0,start });
     visited[start.x][start.y] = true;
 
     const vector<Point> directions = { {0, 1}, {1, 0}, {0, -1}, {-1, 0}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1} }; // Các hướng di chuyển: 8 hướng
     vector<Point> _stepsOnBFS;
     while (!q.empty()) {
-        Point current = q.front();
+        auto current = q.top();
         q.pop();
-
+        visited[current.second.x][current.second.y] = true;
+        double gNew, hNew, fNew;
+        int cnt = 0;
         for (const Point& dir : directions) {
-            Point next = { current.x + dir.x, current.y + dir.y };
+            ++cnt;
+            Point next = { current.second.x + dir.x, current.second.y + dir.y };
             if (isValid(next.x, next.y, Game::widget->_maxRow, Game::widget->_maxCol)
                 && visited[next.x][next.y] == false
                 && Game::widget->_gridRects[next.x][next.y]->_type != Cell::typeCell::Blocked
-                && Game::widget->_gridRects[current.x][current.y]->_type != Cell::typeCell::Blocked)
+                && Game::widget->_gridRects[current.second.x][current.second.y]->_type != Cell::typeCell::Blocked)
             {
-                visited[next.x][next.y] = true;
-                q.push(next);
-                Game::widget->_gridRects[next.x][next.y]->_parentOnBFS = current;
-                if (_timeOnFrame)
-                {
-                    Game::widget->_gridRects[next.x][next.y]->setStepOnBFS();
-                    _stepsOnBFS.push_back(next);
-                    Game::widget->update();
-                    delay(_timeOnFrame);
+
+                gNew = details[current.second.x][current.second.y].g + 1.0; // trong TH chi phi di chuyen sang moi o la nhu nhau(cheo, doc, ngang) \\\ su dung + ((cnt < 4) ? 1.0 : sqrt(2.0)); neu duong cheo duoc tinh la hon doc va ngang
+                hNew = calculateHeuristicValue(next.x, next.y, end);
+                fNew = gNew + hNew;
+
+                if (details[next.x][next.y].f > fNew || details[next.x][next.y].f == FLT_MAX) {
+
+                    q.push({ fNew, next });
+                    details[next.x][next.y].g = gNew;
+                    details[next.x][next.y].f = fNew;
+                    details[next.x][next.y].h = hNew;
+                    Game::widget->_gridRects[next.x][next.y]->_parentOnBFS = current.second;
+
+                    if (_timeOnFrame)
+                    {
+                        Game::widget->_gridRects[next.x][next.y]->setStepOnBFS();
+                        _stepsOnBFS.push_back(next);
+                        Game::widget->update();
+                        delay(_timeOnFrame);
+                    }
+                    if (next.x == end.x && next.y == end.y)
+                    {
+                        vector<Point> path;
+                        while (!(next.x == start.x && next.y == start.y))
+                        {
+                            path.push_back(Game::widget->_gridRects[next.x][next.y]->_parentOnBFS);
+                            next = Game::widget->_gridRects[next.x][next.y]->_parentOnBFS;
+                        }
+                        clearStepsOnBFS(_stepsOnBFS);
+                        return path;
+                    }
                 }
+
+
                 if (!_isOnBFS)
                 {
                     clearStepsOnBFS(_stepsOnBFS);
                     return {};
                 }
-                if (next.x == end.x && next.y == end.y)
-                {
-                    vector<Point> path;
-                    while (!(next.x == start.x && next.y == start.y))
-                    {
-                        path.push_back(Game::widget->_gridRects[next.x][next.y]->_parentOnBFS);
-                        next = Game::widget->_gridRects[next.x][next.y]->_parentOnBFS;
-                    }
-                    clearStepsOnBFS(_stepsOnBFS);
-                    return path;
-                }
+
             }
         }
     }
@@ -223,7 +248,8 @@ void ControllerBut::handleClick()
         _controller->_target = nullptr;
         _controller->_path.clear();
         Game::widget.reset();
-        Game::widget = std::make_shared<GridWidget>();
+        Game::widget = std::make_shared<GridWidget>(32, 32, &*Game::demo);
+        Game::demo->launch();
         Game::widget->show();
         return;
     }
@@ -309,7 +335,8 @@ void ResizeWidget::onResizeButtonClicked() {
         Game::controller->_target = nullptr;
         Game::controller->_path.clear();
         Game::widget.reset();
-        Game::widget = std::make_shared<GridWidget>(width, height);
+        Game::widget = std::make_shared<GridWidget>(width, height, &*Game::demo);
+        Game::demo->launch();
         Game::widget->show();
     }
     this->close();

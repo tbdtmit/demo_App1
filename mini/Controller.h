@@ -23,6 +23,7 @@ class ResizeWidget;
 
 //::std::shared_ptr<GridWidget> Game::widget;
 
+
 enum typeButton
 {
     UnBlocked,
@@ -43,6 +44,15 @@ struct Point {
     int x, y;
 };
 
+struct DetailPoint {
+    double h, g, f = FLT_MAX;
+};
+
+struct CompareFirst {
+    bool operator()(const pair<double, Point>& a, const pair<double, Point>& b) const {
+        return a.first > b.first; // Phần tử nhỏ hơn sẽ đứng trước
+    }
+};
 
 class ControllerBut : public QPushButton
 {

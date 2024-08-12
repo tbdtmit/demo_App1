@@ -85,12 +85,28 @@ public:
 class Game : public QWidget{
 
 public:
+    static std::shared_ptr<Game> demo;
+    Game(QWidget* parent = nullptr);
+
     void launch()
     {
-        Game::widget->show();
-        Game::controller->move(Game::widget->x() - Game::controller->width() - 20, Game::widget->y());
-        Game::controller->show();
+
+        //Game::controller->move(Game::widget->x() - Game::controller->width() - 20, Game::widget->y());
+        //QHBoxLayout* layout = new QHBoxLayout(&*demo);
+        layout1->addWidget(&*Game::widget);
+        layout2->addWidget(&*Game::controller);
+        mainLayout->addLayout(layout1);
+        mainLayout->addLayout(layout2);
+        demo->setLayout(mainLayout);
+
+
+        //Game::widget->show();
+
+        //Game::controller->show();
     }
+     QHBoxLayout* layout1;
+     QHBoxLayout* layout2;
+     QHBoxLayout* mainLayout;
     static std::shared_ptr<Controller> controller;
     static std::shared_ptr<GridWidget> widget;
 };

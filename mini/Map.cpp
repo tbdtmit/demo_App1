@@ -108,12 +108,12 @@ void GridWidget::resizeEvent(QResizeEvent* event)
         }
     }
 
-    QScreen* screen = QGuiApplication::primaryScreen();
-    auto widthScreen = screen->availableGeometry().width();
-    if (widthScreen - Game::widget->width() > Game::controller->width() + 20 && Game::widget->x() - Game::controller->width() > 20)
-    {
-        Game::controller->move(Game::widget->x() - Game::controller->width() - 20, Game::widget->y());
-    }
+    //QScreen* screen = QGuiApplication::primaryScreen();
+    //auto widthScreen = screen->availableGeometry().width();
+    //if (widthScreen - Game::widget->width() > Game::controller->width() + 20 && Game::widget->x() - Game::controller->width() > 20)
+    //{
+    //    Game::controller->move(Game::widget->x() - Game::controller->width() - 20, Game::widget->y());
+    //}
 }
 
 void GridWidget::mapUpdate(QMouseEvent* e)
@@ -366,3 +366,20 @@ void Cell::setStepOnBFS()
         paintermap.fillRect(*this, paintermap.pen().color());
     }
 }
+
+
+Game::Game(QWidget * parent)
+    : QWidget(parent) {
+
+    this->resize(1000, 1000);
+    layout1 = new QHBoxLayout(&*demo);
+    layout2 = new QHBoxLayout(&*demo);
+    mainLayout = new QHBoxLayout(&*demo);
+
+    //QHBoxLayout* layout = new QHBoxLayout(this);
+    //layout->addWidget(&*Game::widget);
+    //layout->addWidget(&*Game::controller);
+
+    //setLayout(layout);
+}
+
