@@ -5,18 +5,18 @@ GridWidget::GridWidget(int maxX, int maxY, QWidget* parent)
       _maxRow(maxX),
       _maxCol(maxY)
 {
-    if (_maxCol > 60 || _maxRow > 100)
-    {
-        _cellSizeY = _cellSizeX = 10;
-    }
-    if (_maxCol > 100 || _maxRow > 180)
-    {
-        _cellSizeY = _cellSizeX = 5;
-    }
-    if (_maxCol > 150)
-    {
-        _cellSizeY = _cellSizeX = 4;
-    }
+    //if (_maxCol > 60 || _maxRow > 100)
+    //{
+    //    _cellSizeY = _cellSizeX = 10;
+    //}
+    //if (_maxCol > 100 || _maxRow > 180)
+    //{
+    //    _cellSizeY = _cellSizeX = 5;
+    //}
+    //if (_maxCol > 150)
+    //{
+    //    _cellSizeY = _cellSizeX = 4;
+    //}
 
     _gridSizeRow = _cellSizeY * (_maxRow);
     _gridSizeCol = _cellSizeX * (_maxCol);
@@ -80,7 +80,7 @@ void GridWidget::paintEvent(QPaintEvent* event)
 
 void GridWidget::resizeEvent(QResizeEvent* event)
 {
-    auto Hmap = (height());
+    auto Hmap = (Game::demo->height());
     auto Wmap = (width());
 
     _cellSizeX = Wmap / _maxCol;
@@ -173,6 +173,8 @@ void GridWidget::drawInitialMap(QPainter& paintermap, QPainter& paintergrid, int
             paintergrid.setPen(Qt::black);
             paintermap.fillRect(*_gridRects[i][j], paintermap.pen().color());
             paintergrid.drawRect(*_gridRects[i][j]);
+            paintergrid.drawLine(x(), height() + y(), x() + width(), y() + height());
+            paintergrid.drawLine(x() + width(), y(), x() + width(), height() + y());
 }
 
 void GridWidget::drawMapAfterResize(QPainter& paintermap, QPainter& paintergrid, int i, int j)
@@ -209,7 +211,8 @@ void GridWidget::drawMapAfterResize(QPainter& paintermap, QPainter& paintergrid,
     paintergrid.setPen(Qt::black);
     paintermap.fillRect(*_gridRects[i][j], paintermap.pen().color());
     paintergrid.drawRect(*_gridRects[i][j]);
-
+    paintergrid.drawLine(x(), height() + y(), x() + width(), y() + height());
+    paintergrid.drawLine(x() + width(), y(), x() + width(), height() + y());
     //    }
     //}
 }
