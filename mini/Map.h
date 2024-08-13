@@ -53,7 +53,7 @@ public:
     void mouseReleaseEvent(QMouseEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
-    void enterEvent(QEvent* event) override;
+    //void enterEvent(QEvent* event) override;
     void mapUpdate(QMouseEvent* event);
     void drawInitialMap(QPainter& paintermap, QPainter& paintergrid, int i, int j);
     void drawMapAfterResize(QPainter& paintermap, QPainter& paintergrid, int i, int j);

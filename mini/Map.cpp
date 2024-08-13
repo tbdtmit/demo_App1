@@ -67,6 +67,7 @@ void GridWidget::mouseReleaseEvent(QMouseEvent* event)
 
 void GridWidget::paintEvent(QPaintEvent* event)
 {
+    QWidget::paintEvent(event);
     QPainter painter(this);
 
     painter.drawPixmap(0, 0, _map); // Vẽ lại pixmap hiện tại
@@ -74,7 +75,11 @@ void GridWidget::paintEvent(QPaintEvent* event)
     {
         painter.drawPixmap(0, 0, _grid);
     }
-
+    QPen pen(Qt::black);  // Màu đen, dày 3 pixels
+    painter.setPen(pen);
+    painter.drawRect(rect().adjusted(0, 0, -1, -1));
+    //painter.drawLine(x(), height() + y(), x() + width(), y() + height());
+    //painter.drawLine(x() + width(), y(), x() + width(), height() + y());
     //cout << "paintEvent " << endl;
 }
 
@@ -173,8 +178,7 @@ void GridWidget::drawInitialMap(QPainter& paintermap, QPainter& paintergrid, int
             paintergrid.setPen(Qt::black);
             paintermap.fillRect(*_gridRects[i][j], paintermap.pen().color());
             paintergrid.drawRect(*_gridRects[i][j]);
-            paintergrid.drawLine(x(), height() + y(), x() + width(), y() + height());
-            paintergrid.drawLine(x() + width(), y(), x() + width(), height() + y());
+
 }
 
 void GridWidget::drawMapAfterResize(QPainter& paintermap, QPainter& paintergrid, int i, int j)
@@ -211,8 +215,8 @@ void GridWidget::drawMapAfterResize(QPainter& paintermap, QPainter& paintergrid,
     paintergrid.setPen(Qt::black);
     paintermap.fillRect(*_gridRects[i][j], paintermap.pen().color());
     paintergrid.drawRect(*_gridRects[i][j]);
-    paintergrid.drawLine(x(), height() + y(), x() + width(), y() + height());
-    paintergrid.drawLine(x() + width(), y(), x() + width(), height() + y());
+    //paintergrid.drawLine(x(), height() + y(), x() + width(), y() + height());
+    //paintergrid.drawLine(x() + width(), y(), x() + width(), height() + y());
     //    }
     //}
 }
@@ -288,12 +292,12 @@ void GridWidget::clearPath()
 }
 
 
-void GridWidget::enterEvent(QEvent* event)
-{
-    QWidget::enterEvent(event);
-    Game::controller->raise();
-
-}
+//void GridWidget::enterEvent(QEvent* event)
+//{
+//    QWidget::enterEvent(event);
+//    Game::controller->raise();
+//
+//}
 
 
 void Cell::setLocation(int x, int y)

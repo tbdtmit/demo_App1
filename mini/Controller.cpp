@@ -250,7 +250,7 @@ void ControllerBut::handleClick()
         Game::widget.reset();
         Game::widget = std::make_shared<GridWidget>(32, 32, &*Game::demo);
         Game::demo->launch();
-        Game::widget->show();
+        //Game::widget->show();
         return;
     }
     else if (_controller->_status == typeButton::Resize)
@@ -337,7 +337,7 @@ void ResizeWidget::onResizeButtonClicked() {
         Game::widget.reset();
         Game::widget = std::make_shared<GridWidget>(width, height, &*Game::demo);
         Game::demo->launch();
-        Game::widget->show();
+        //Game::widget->show();
     }
     this->close();
 }
