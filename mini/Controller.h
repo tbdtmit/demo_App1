@@ -50,7 +50,7 @@ struct DetailPoint {
 
 struct CompareFirst {
     bool operator()(const pair<double, Point>& a, const pair<double, Point>& b) const {
-        return a.first > b.first; // Phần tử nhỏ hơn sẽ đứng trước
+        return a.first > b.first; 
     }
 };
 
@@ -106,7 +106,7 @@ public:
 	};
 
     Controller(QWidget* parent = nullptr);
-    vector<Point> BFS();
+    vector<Point> Astar();
 //private:
     void setupController();
     typeButton _status;

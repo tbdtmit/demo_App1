@@ -37,7 +37,7 @@ Controller::Controller(QWidget* parent) : QWidget(parent)
 
 }
 
-vector<Point> Controller::BFS()
+vector<Point> Controller::Astar()
 {
     _isOnBFS = true;
     Point start = { _source->_x, _source->_y };
@@ -224,7 +224,7 @@ void ControllerBut::handleClick()
         if (_controller->_source && _controller->_target && _controller->_source->isValid() && _controller->_target->isValid())
         {
             Game::widget->clearPath();
-            _controller->_path = _controller->BFS();
+            _controller->_path = _controller->Astar();
             _controller->_isOnBFS = false;
             Game::widget->drawPath();
 
@@ -259,7 +259,8 @@ void ControllerBut::handleClick()
         {
             _controller->_resize.close();
         }
-        _controller->_resize.resize(200, 150);
+        _controller->_resize.resize(300, 150);
+        _controller->_resize.setWindowTitle("Size hien tai: " + QString::number(int(Game::widget->_maxRow)) + " x " + QString::number(int(Game::widget->_maxCol)));
         _controller->_resize.show();
     }
     else if (_controller->_status == typeButton::ClearGrid)

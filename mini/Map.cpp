@@ -94,7 +94,7 @@ void GridWidget::resizeEvent(QResizeEvent* event)
     _gridSizeCol = _cellSizeX * (_maxCol);
     resize(_gridSizeCol, _gridSizeRow);
     _map = QPixmap(size());
-    _map.fill(Qt::transparent); // Đảm bảo rằng pixmap ban đầu là trong suốt
+    _map.fill(Qt::transparent);
 
     _grid = QPixmap(size());
     _grid.fill(Qt::transparent);
