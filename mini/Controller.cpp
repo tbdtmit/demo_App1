@@ -40,8 +40,8 @@ Controller::Controller(QWidget* parent) : QWidget(parent)
 vector<Point> Controller::Astar()
 {
     _isOnBFS = true;
-    Point start = { _source->_x, _source->_y };
-    Point end = { _target->_x, _target->_y };
+    Point start = { _source.lock()->_x, _source.lock()->_y };
+    Point end = { _target.lock()->_x, _target.lock()->_y };
 
     vector<vector<bool>> visited(Game::widget->_maxRow + 1, vector<bool>(Game::widget->_maxCol + 1, false));
     vector<vector<DetailPoint>> details(Game::widget->_maxRow + 1, vector<DetailPoint>(Game::widget->_maxCol + 1));
@@ -221,7 +221,7 @@ void ControllerBut::handleClick()
     }
     if (_controller->_status == typeButton::Starting)
     {
-        if (_controller->_source && _controller->_target && _controller->_source->isValid() && _controller->_target->isValid())
+        if (_controller->_source.lock() && _controller->_target.lock() /*&& _controller->_source.lock()->isValid() && _controller->_target.lock()->isValid()*/)
         {
             Game::widget->clearPath();
             _controller->_path = _controller->Astar();
@@ -244,8 +244,8 @@ void ControllerBut::handleClick()
     else if (_controller->_status == typeButton::Reset)
     {
 
-        _controller->_source = nullptr;
-        _controller->_target = nullptr;
+        //_controller->_source = nullptr;
+        //_controller->_target = nullptr;
         _controller->_path.clear();
         Game::widget.reset();
         Game::widget = std::make_shared<GridWidget>(32, 32, &*Game::demo);
@@ -332,8 +332,8 @@ void ResizeWidget::onResizeButtonClicked() {
 
     if (width >= 32 && width <= 256 && height >= 32 && height <= 256)
     {
-        Game::controller->_source = nullptr;
-        Game::controller->_target = nullptr;
+        //Game::controller->_source = nullptr;
+        //Game::controller->_target = nullptr;
         Game::controller->_path.clear();
         Game::widget.reset();
         Game::widget = std::make_shared<GridWidget>(width, height, &*Game::demo);

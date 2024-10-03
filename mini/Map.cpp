@@ -308,16 +308,18 @@ void Cell::setLocation(int x, int y)
 
 void Cell::setSource()
 {
+    //std::shared_ptr<Cell> cell = std::make_shared<Cell>(*this);
     QPainter paintermap(&Game::widget->_map);
     if (this->_type == typeCell::Target) return;
-    if (Game::controller->_source)
+    if (Game::controller->_source.lock())
     {
-        Game::controller->_source->_type = typeCell::UnBlocked;
+        Game::controller->_source.lock()->_type = typeCell::UnBlocked;
         paintermap.setPen(Qt::white);
-        paintermap.fillRect(*Game::controller->_source, paintermap.pen().color());
+        paintermap.fillRect(*Game::controller->_source.lock(), paintermap.pen().color());
     }
-    Game::controller->_source = this;
-    Game::controller->_source->_type = typeCell::Source;
+    Game::controller->_source = Game::widget->_gridRects[this->_x][this->_y];
+    if (Game::controller->_source.lock())
+        Game::controller->_source.lock()->_type = typeCell::Source;
     paintermap.setPen(Qt::green);
     paintermap.fillRect(*this, paintermap.pen().color());
 
@@ -325,16 +327,18 @@ void Cell::setSource()
 
 void Cell::setTarget()
 {
+    //std::shared_ptr<Cell> cell = std::make_shared<Cell>(*this);
     QPainter paintermap(&Game::widget->_map);
     if (this->_type == typeCell::Source) return;
-    if (Game::controller->_target)
+    if (Game::controller->_target.lock())
     {
-        Game::controller->_target->_type = typeCell::UnBlocked;
+        Game::controller->_target.lock()->_type = typeCell::UnBlocked;
         paintermap.setPen(Qt::white);
-        paintermap.fillRect(*Game::controller->_target, paintermap.pen().color());
+        paintermap.fillRect(*Game::controller->_target.lock(), paintermap.pen().color());
     }
-    Game::controller->_target = this;
-    Game::controller->_target->_type = typeCell::Target;
+    Game::controller->_target = Game::widget->_gridRects[this->_x][this->_y];
+    if(Game::controller->_target.lock())
+        Game::controller->_target.lock()->_type = typeCell::Target;
     paintermap.setPen(Qt::red);
     paintermap.fillRect(*this, paintermap.pen().color());
 }

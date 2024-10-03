@@ -111,8 +111,8 @@ public:
     void setupController();
     typeButton _status;
     QButtonGroup* _buttonGroup = new QButtonGroup(this);
-    Cell* _source = nullptr;
-    Cell* _target = nullptr;
+    std::weak_ptr<Cell> _source;
+    std::weak_ptr<Cell> _target;
     vector<Point> _path;
     ResizeWidget _resize;
     SetTimeWidget _setTimeOnFrame;
